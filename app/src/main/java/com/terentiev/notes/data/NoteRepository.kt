@@ -1,20 +1,21 @@
 package com.terentiev.notes.data
 
 import android.app.Application
+import android.content.Context
 import android.util.Log.d
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class NoteRepository(application: Application) {
+class NoteRepository(context: Context) {
     private val TAG = "NoteRepository"
     private val noteDao: NoteDao
     private val activeNotes: LiveData<List<NoteRecord>>
     private val archivedNotes: LiveData<List<NoteRecord>>
 
     init {
-        val db = NoteDatabase.getInstance(application.applicationContext)
+        val db = NoteDatabase.getInstance(context)
         noteDao = db!!.todoDao()
         activeNotes = noteDao.getActiveNotes()
         archivedNotes = noteDao.getArchivedNotes()

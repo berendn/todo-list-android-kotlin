@@ -8,7 +8,7 @@ import com.terentiev.notes.data.NoteRepository
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repo: NoteRepository = NoteRepository(application)
+    private val repo: NoteRepository = NoteRepository(application.applicationContext)
 
     fun saveNote(note: NoteRecord) {
         repo.saveNote(note)
