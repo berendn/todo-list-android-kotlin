@@ -99,8 +99,8 @@ class ArchiveActivity : AppCompatActivity(), NoteListAdapter.TodoEvents {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.search_archived_item -> true
             R.id.home -> {
                 onBackPressed()

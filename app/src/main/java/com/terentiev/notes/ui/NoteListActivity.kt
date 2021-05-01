@@ -120,8 +120,8 @@ class NoteListActivity : AppCompatActivity(), NoteListAdapter.TodoEvents {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.search_active_item -> true
             R.id.open_archive_item -> {
                 val i = Intent(this, ArchiveActivity::class.java)

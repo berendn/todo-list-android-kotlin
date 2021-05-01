@@ -27,10 +27,11 @@ class CreateNoteActivity : AppCompatActivity() {
 
         val intent = intent
         if (intent != null && intent.hasExtra(Constants.INTENT_OBJECT)) {
-            val note: NoteRecord = intent.getParcelableExtra(Constants.INTENT_OBJECT)
-            this.noteRecord = note
-            prePopulateData(note)
-            et_todo_title.setSelection(et_todo_title.text.length)
+            (intent.getParcelableExtra(Constants.INTENT_OBJECT)as? NoteRecord)?.let { note ->
+                this.noteRecord = note
+                prePopulateData(note)
+                et_todo_title.setSelection(et_todo_title.text.length)
+            }
         }
         toolbar.title = if (noteRecord != null) getString(R.string.editNote) else getString(R.string.createNote)
 
@@ -46,8 +47,8 @@ class CreateNoteActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.save_note -> {
                 saveTodo()
             }
