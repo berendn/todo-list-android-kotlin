@@ -8,7 +8,9 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.terentiev.notes.R
 import com.terentiev.notes.data.NoteRecord
+import com.terentiev.notes.utils.NoteRecordsFilter
 import kotlinx.android.synthetic.main.note_item.view.*
+import java.util.Locale.filter
 
 class NoteListAdapter(todoEvents: TodoEvents) : RecyclerView.Adapter<NoteListAdapter.ViewHolder>(),
     Filterable {
@@ -55,19 +57,8 @@ class NoteListAdapter(todoEvents: TodoEvents) : RecyclerView.Adapter<NoteListAda
         return object : Filter() {
             override fun performFiltering(p0: CharSequence?): FilterResults {
                 val charString = p0.toString()
-                filteredNoteList = if (charString.isEmpty()) {
-                    notes
-                } else {
-                    val filteredList = arrayListOf<NoteRecord>()
-                    for (row in notes) {
-                        if (row.title!!.toLowerCase().contains(charString.toLowerCase())
-                            || row.content!!.toLowerCase().contains(charString.toLowerCase())
-                        ) {
-                            filteredList.add(row)
-                        }
-                    }
-                    filteredList
-                }
+
+                filteredNoteList = NoteRecordsFilter.filter(notes, charString)
 
                 val filterResults = FilterResults()
                 filterResults.values = filteredNoteList
@@ -81,6 +72,7 @@ class NoteListAdapter(todoEvents: TodoEvents) : RecyclerView.Adapter<NoteListAda
 
         }
     }
+
 
     fun deleteItem(position: Int) {
         listener.onItemDeleted(notes[position], position)
