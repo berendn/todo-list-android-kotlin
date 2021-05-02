@@ -1,14 +1,15 @@
 package com.terentiev.notes
 
-
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.runner.AndroidJUnitRunner
 import com.terentiev.notes.data.NoteRecord
 import com.terentiev.notes.utils.NoteRecordsFilter
-import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.CoreMatchers.everyItem
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.beans.HasPropertyWithValue.hasProperty
-import org.junit.Assert.assertEquals
+import org.hamcrest.CoreMatchers
+import org.hamcrest.MatcherAssert
+import org.hamcrest.beans.HasPropertyWithValue
+import org.junit.Assert
 import org.junit.Test
+import org.junit.runner.RunWith
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -33,18 +34,34 @@ class FilterTest {
     @Test
     fun emptyFilterReturnsAllNotes() {
         val filteredList = NoteRecordsFilter.filter(testData, "")
-        assertEquals(testData, filteredList)
+        Assert.assertEquals(testData, filteredList)
     }
 
     @Test
     fun filterWorksOnTitle() {
         val filteredList = NoteRecordsFilter.filter(testData, "5")
-        assertThat(filteredList, everyItem(hasProperty("title", containsString("5"))))
+        MatcherAssert.assertThat(
+            filteredList,
+            CoreMatchers.everyItem(
+                HasPropertyWithValue.hasProperty(
+                    "title",
+                    CoreMatchers.containsString("5")
+                )
+            )
+        )
     }
 
     @Test
     fun filterWorksOnContent() {
         val filteredList = NoteRecordsFilter.filter(testData, "t")
-        assertThat(filteredList, everyItem(hasProperty("content", containsString("t"))))
+        MatcherAssert.assertThat(
+            filteredList,
+            CoreMatchers.everyItem(
+                HasPropertyWithValue.hasProperty(
+                    "content",
+                    CoreMatchers.containsString("t")
+                )
+            )
+        )
     }
 }
