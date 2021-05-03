@@ -3,12 +3,13 @@ package com.terentiev.notes.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.terentiev.notes.data.NoteDatabase
 import com.terentiev.notes.data.NoteRecord
 import com.terentiev.notes.data.NoteRepository
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repo: NoteRepository = NoteRepository(application.applicationContext)
+    private val repo: NoteRepository = NoteRepository(NoteDatabase.getInstance(application.applicationContext)!!.todoDao())
 
     fun saveNote(note: NoteRecord) {
         repo.saveNote(note)

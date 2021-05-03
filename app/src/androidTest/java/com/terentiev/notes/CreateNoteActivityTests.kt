@@ -1,5 +1,8 @@
 package com.terentiev.notes
 
+import androidx.core.os.bundleOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -11,9 +14,10 @@ import com.terentiev.notes.data.NoteDao
 import com.terentiev.notes.data.NoteDatabase
 import com.terentiev.notes.data.NoteRecord
 import com.terentiev.notes.data.NoteRepository
+import com.terentiev.notes.ui.CreateNoteActivity
 import com.terentiev.notes.ui.NoteListActivity
-import io.mockk.every
-import io.mockk.mockk
+import com.terentiev.notes.utils.Constants
+import io.mockk.*
 import kotlinx.android.synthetic.main.content_create_note.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,50 +36,35 @@ import org.junit.Rule
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4ClassRunner::class)
-class ExampleInstrumentedTest {
+class CreateNoteActivityTests {
 
     @get:Rule
-    val activityRule = ActivityScenarioRule(NoteListActivity::class.java)
+    val activityRule = ActivityScenarioRule(CreateNoteActivity::class.java)
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    @Before
-    fun setup() {
-        TestUtils.clearDb(context)
+    @Test
+    fun mockedDaoTest(){
+        val noteId = 1L
 
-        val db = NoteDatabase.getInstance(context)
-        val noteDao = db!!.todoDao()
-        runBlocking {
-            this.launch(Dispatchers.IO) {
-                noteDao.saveNote(
-                    NoteRecord(
-                        id = null,
-                        title = "Test title",
-                        content = "Test content"
-                    )
-                )
-            }
+        val note = NoteRecord(
+            noteId,
+            "Note title",
+            "note content",
+            0
+        )
+
+        val mockDao = mockk<NoteDao>(relaxed = true)
+        every {
+            mockDao.getActiveNotes()
+        } returns MutableLiveData(listOf(note))
+
+        val repo = spyk(NoteRepository(mockDao))
+
+        verify {
+            mockDao.getActiveNotes()
         }
+
     }
-
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.terentiev.notes", appContext.packageName)
-    }
-
-
-    @Test
-    fun hasTestNote() {
-        onView(withText("Test title")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun opensTestNote() {
-        onView(withText("Test title")).perform(click())
-        onView(withId(R.id.et_todo_title)).check(matches(withText("Test title")))
-    }
-
 
 }

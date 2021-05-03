@@ -12,7 +12,7 @@ interface NoteDao {
     fun getArchivedNotes(): LiveData<List<NoteRecord>>
 
     @Query("SELECT * FROM notes WHERE id=:tid")
-    fun getNote(tid: Int): NoteRecord
+    fun getNote(tid: Long): NoteRecord
 
     @Insert
     suspend fun saveNote(note: NoteRecord)

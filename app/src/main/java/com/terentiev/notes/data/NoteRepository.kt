@@ -8,15 +8,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class NoteRepository(context: Context) {
-    private val TAG = "NoteRepository"
+class NoteRepository(
     private val noteDao: NoteDao
+) {
+    private val TAG = "NoteRepository"
     private val activeNotes: LiveData<List<NoteRecord>>
     private val archivedNotes: LiveData<List<NoteRecord>>
 
     init {
-        val db = NoteDatabase.getInstance(context)
-        noteDao = db!!.todoDao()
         activeNotes = noteDao.getActiveNotes()
         archivedNotes = noteDao.getArchivedNotes()
     }
