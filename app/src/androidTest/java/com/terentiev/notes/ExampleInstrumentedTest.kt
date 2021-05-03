@@ -2,7 +2,10 @@ package com.terentiev.notes
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeLeft
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
@@ -12,6 +15,7 @@ import com.terentiev.notes.data.NoteDatabase
 import com.terentiev.notes.data.NoteRecord
 import com.terentiev.notes.data.NoteRepository
 import com.terentiev.notes.ui.NoteListActivity
+import com.terentiev.notes.ui.NoteListAdapter
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.android.synthetic.main.content_create_note.*
@@ -75,6 +79,17 @@ class ExampleInstrumentedTest {
     fun opensTestNote() {
         onView(withText("Test title")).perform(click())
         onView(withId(R.id.et_todo_title)).check(matches(withText("Test title")))
+    }
+
+    @Test
+    fun test_NoNotesLeftAfterArchiving() {
+        onView(withId(R.id.rv_todo_list)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<NoteListAdapter.ViewHolder>(
+                0,
+                swipeLeft()
+            )
+        )
+        onView(withId(R.id.rv_todo_list)).check(matches(hasChildCount(0)))
     }
 
 
